@@ -6,22 +6,60 @@ function computerPlay(){
     return datos[Math.floor(Math.random()*3)];
 }
 function checkWinner(playerSelection,computerSelection){
-    if(playerSelection===computerSelection)return `Empate con ${playerSelection}`;
+    if(playerSelection===computerSelection)return "draw";
     if(playerSelection=="Rock"){
-        if(computerSelection=="Paper") return `Pierdes, ${computerSelection}>${playerSelection}`;
-        else return `Ganas, ${computerSelection}<${playerSelection}`;
+        if(computerSelection=="Paper") return "lose";
+        else return "win";
     }
     if(playerSelection=="Paper"){
-        if(computerSelection=="Scissors") return `Pierdes, ${computerSelection}>${playerSelection}`;
-        else return `Ganas, ${computerSelection}<${playerSelection}`;
+        if(computerSelection=="Scissors") return "lose";
+        else return "win";
     }
     if(playerSelection=="Scissors"){
-        if(computerSelection=="Rock") return `Pierdes, ${computerSelection}>${playerSelection}`;
-        else return `Ganas, ${computerSelection}<${playerSelection}`;
+        if(computerSelection=="Rock") return "lose";
+        else return "win";
     }
 }
-for (let i = 0; i < 5; i++) {
-    const computerSelection=computerPlay();
-    const playerSelection=datos[prompt("0=(Rock) | 1=(Paper) | 2=(Scissors)")];
-    console.log(checkWinner(playerSelection,computerSelection));
+function displayWinner(result){
+    switch (result) {
+        case "win":
+            userWins++;
+            break;
+        case "lose":
+            cpuWins++;
+            break;
+        default:
+            break;
+    }
+    document.querySelector("#resUser").textContent=userWins;
+    document.querySelector("#resCPU").textContent=cpuWins;
+    document.querySelector("#infoResults").textContent=`Computer choose ${computerSelection}. You ${result}`;
 }
+var userWins=0;
+var cpuWins=0;
+var computerSelection;
+var playerSelection;
+var totalWinner;
+var options=document.querySelectorAll(".election");
+options.forEach(option=>{
+    option.addEventListener(
+        "click",
+        ()=>{
+            if(!totalWinner){
+                computerSelection=computerPlay();
+                playerSelection=option.alt;
+                const winner=checkWinner(playerSelection,computerSelection);
+                displayWinner(winner);
+                if(userWins==5){
+                    totalWinner="Usuario";
+                    alert("Ganas");
+                }
+                else if(cpuWins==5){
+                    totalWinner="CPU";
+                    alert("Pierdes");
+                }
+            }
+        }
+    )
+    
+})
